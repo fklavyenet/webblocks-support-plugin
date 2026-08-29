@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use WebBlocks\Support\Http\Controllers\SupportController;
+use WebBlocks\Support\SupportServiceProvider;
+
+SupportServiceProvider::registerViewNamespace();
 
 Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 Route::get('/support/new', [SupportController::class, 'create'])->name('support.create');

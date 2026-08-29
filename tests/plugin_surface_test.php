@@ -14,7 +14,10 @@ $assert = static function (bool $condition, string $message): void {
 $assert(($manifest['handle'] ?? null) === 'webblocks-support', 'Plugin handle is invalid.');
 $assert(($manifest['provider'] ?? null) === 'WebBlocks\\Support\\SupportServiceProvider', 'Provider is invalid.');
 $assert(($manifest['migrations'] ?? null) === 'database/migrations', 'Migration path is missing.');
+$assert(($manifest['health'] ?? null) === 'WebBlocks\\Support\\SupportPluginHealth', 'Health reporter is missing.');
 $assert(is_file($root.'/src/SupportServiceProvider.php'), 'Service provider is missing.');
+$assert(is_file($root.'/src/SupportPluginHealth.php'), 'Health reporter file is missing.');
+$assert(is_file($root.'/src/PluginManifest.php'), 'Manifest reader is missing.');
 $assert(is_file($root.'/routes/admin.php'), 'Admin routes are missing.');
 $assert(is_file($root.'/database/migrations/2026_08_29_080000_create_webblocks_support_connections_table.php'), 'Migration is missing.');
 
@@ -34,5 +37,18 @@ $assert(str_contains($sources, 'webblocks_support_connections'), 'Plugin table i
 
 $indexView = (string) file_get_contents($root.'/resources/views/support/index.blade.php');
 $assert(! str_contains($indexView, 'workbench.webblocksui.com'), 'Plugin UI must not default to one provider.');
+
+$provider = (string) file_get_contents($root.'/src/SupportServiceProvider.php');
+$assert(
+  preg_match('/public static function definition\(\): PluginDefinition\s*\{\s*self::registerViewNamespace\(\);/', $provider) === 1,
+  'definition() must register the view namespace because installed plugin providers are not booted.',
+);
+$assert(str_contains($provider, '->health(SupportPluginHealth::class)'), 'Provider does not register the health reporter.');
+$assert(str_contains($provider, 'PluginManifest::version()'), 'Provider must read its version from the manifest.');
+$assert(! str_contains($provider, "->version('0.1.1')"), 'Provider duplicates the manifest version.');
+
+$health = (string) file_get_contents($root.'/src/SupportPluginHealth.php');
+$assert(str_contains($health, "Schema::hasTable('webblocks_support_connections')"), 'Health does not verify plugin storage.');
+$assert(str_contains($health, "View::exists('webblocks-support::support.index')"), 'Health does not verify the Support interface.');
 
 echo "WebBlocks Support plugin surface passed.\n";
