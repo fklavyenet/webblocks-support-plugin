@@ -51,4 +51,8 @@ $health = (string) file_get_contents($root.'/src/SupportPluginHealth.php');
 $assert(str_contains($health, "Schema::hasTable('webblocks_support_connections')"), 'Health does not verify plugin storage.');
 $assert(str_contains($health, "View::exists('webblocks-support::support.index')"), 'Health does not verify the Support interface.');
 
+$routes = (string) file_get_contents($root.'/routes/admin.php');
+$assert(! str_contains($routes, 'SupportServiceProvider::registerViewNamespace('), 'A new route file must remain callable with the previous provider class already loaded.');
+$assert(str_contains($routes, "View::addNamespace('webblocks-support'"), 'The transition-safe route view fallback is missing.');
+
 echo "WebBlocks Support plugin surface passed.\n";
