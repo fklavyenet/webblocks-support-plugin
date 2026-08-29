@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "handle": "webblocks-support",
+  "label": "WebBlocks Support",
+  "version": "0.1.0",
+  "description": "Connect WebBlocks CMS to any compatible support provider and manage tickets from the admin panel.",
+  "provider": "WebBlocks\\Support\\SupportServiceProvider",
+  "required_cms_version": "^1.75.0",
+  "host_products": ["webblocks-cms"],
+  "requires": {"webblocks-cms": "^1.75.0", "php": ">=8.4"},
+  "type": "cms-plugin",
+  "entry": {"service_provider": "WebBlocks\\Support\\SupportServiceProvider"},
+  "autoload": {"psr-4": {"WebBlocks\\Support\\": "src/"}},
+  "permissions": [
+    {"key": "webblocks-support.access", "label": "Use support tickets"},
+    {"key": "webblocks-support.manage", "label": "Manage the support provider connection"}
+  ],
+  "routes": {"admin": "routes/admin.php"},
+  "migrations": "database/migrations",
+  "config": null
+}

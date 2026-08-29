@@ -1,0 +1,7 @@
+/.env
+/vendor/
+/build/
+/.DS_Store
+
+# Local AI agent contract — never tracked or published.
+AGENTS.md

@@ -1,0 +1,15 @@
+{
+  "name": "webblocks/support",
+  "description": "Provider-independent support tickets for WebBlocks CMS.",
+  "type": "webblocks-cms-plugin",
+  "license": "MIT",
+  "autoload": {"psr-4": {"WebBlocks\\Support\\": "src/"}},
+  "scripts": {
+    "plugin:build": "@php tools/plugin.php build",
+    "plugin:validate": "@php tools/plugin.php validate",
+    "plugin:publish": "@php tools/plugin.php publish",
+    "plugin:publish:dry-run": "@php tools/plugin.php publish --dry-run",
+    "test": "@php tests/plugin_surface_test.php"
+  },
+  "require": {"php": "^8.4", "ext-json": "*", "ext-zip": "*"}
+}
