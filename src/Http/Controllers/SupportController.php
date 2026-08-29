@@ -90,9 +90,12 @@ class SupportController extends Controller
   public function connect(SupportProviderConnectRequest $request): RedirectResponse
   {
     try {
-      $connection = $this->activation->start($request->validated('provider_url'));
+      $connection = $this->activation->start(
+        $request->validated('provider_url'),
+        $request->validated('invitation_code'),
+      );
     } catch (Throwable) {
-      return back()->withInput()->withErrors(['provider_url' => $this->translator->admin('support.provider_connection_failed')]);
+      return back()->withInput()->withErrors(['invitation_code' => $this->translator->admin('support.invitation_invalid')]);
     }
 
     return redirect()->route('webblocks.plugins.webblocks_support.support.index')->with('status', $this->translator->admin('support.activation_started', null, [

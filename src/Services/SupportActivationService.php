@@ -12,21 +12,21 @@ final class SupportActivationService
     private readonly CompatibleSupportProvider $provider,
   ) {}
 
-  public function start(string $providerUrl): SupportConnection
+  public function start(string $providerUrl, string $invitationCode): SupportConnection
   {
     if ($this->connections->current()) {
       throw new SupportProviderException('Disconnect the current support provider before starting another activation.');
     }
 
     $discovery = $this->provider->discover($providerUrl);
-    $activation = $this->provider->beginActivation($discovery);
+    $activation = $this->provider->beginActivation($discovery, $invitationCode);
 
     return $this->connections->replace($discovery + [
       'status' => 'pending',
       'activation_id' => $activation['activation_id'],
       'activation_secret' => $activation['activation_secret'],
       'activation_user_code' => $activation['user_code'],
-      'activation_url' => $activation['verification_url'],
+      'activation_url' => null,
       'activation_expires_at' => isset($activation['expires_at']) ? Carbon::parse($activation['expires_at']) : now()->addMinutes(15),
     ]);
   }

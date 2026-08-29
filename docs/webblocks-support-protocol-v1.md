@@ -15,12 +15,13 @@ same contract on their own HTTPS origin.
   "version": "1.0",
   "name": "Example Support",
   "api_base_url": "https://support.example.com/api/webblocks-support/v1",
-  "capabilities": ["ticket.create", "ticket.list", "ticket.read", "ticket.reply"]
+  "capabilities": ["ticket.create", "ticket.list", "ticket.read", "ticket.reply"],
+  "activation_methods": ["invitation_code"]
 }
 ```
 
-The discovery URL, API base URL and activation page must use the same public
-HTTPS origin. Redirects are not followed. CMS 1.0 requires all four ticket
+The discovery URL and API base URL must use the same public HTTPS origin.
+Redirects are not followed. CMS 1.0 requires all four ticket
 capabilities.
 
 ## Installation activation
@@ -33,24 +34,27 @@ capabilities.
   "product": "webblocks-cms",
   "product_version": "1.74.0",
   "site_url": "https://example.com",
-  "environment": "production"
+  "environment": "production",
+  "invitation_code": "WBS-ABCD-EFGH-IJKL"
 }
 ```
 
-It returns an activation secret for polling and a user-facing code and URL:
+The invitation must be valid, unused and issued for the requested product. It
+is consumed atomically when the activation is created. The provider returns an
+activation secret for polling and a user-facing reference code:
 
 ```json
 {
   "activation_id": "act_123",
   "activation_secret": "one-install-polling-secret",
   "user_code": "ABCD-EFGH",
-  "verification_url": "https://support.example.com/connect",
   "expires_at": "2026-08-28T14:00:00Z"
 }
 ```
 
-The provider owns login, purchase, organization selection and entitlement
-rules. The CMS polls `GET {api_base_url}/activations/{activation_id}` with the
+No provider login or external activation page is required. The provider
+operator reviews the invitation-backed request and the CMS polls
+`GET {api_base_url}/activations/{activation_id}` with the
 activation secret as a bearer token. A pending response is
 `{"status":"pending"}`. Once approved it returns:
 

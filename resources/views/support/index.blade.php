@@ -51,6 +51,12 @@
                                 <p class="wb-text-muted wb-text-sm">{{ $adminText('support.provider_url_help') }}</p>
                                 @error('provider_url')<div class="wb-field-error">{{ $message }}</div>@enderror
                             </div>
+                            <div class="wb-field">
+                                <label class="wb-label" for="supportInvitationCode">{{ $adminText('support.invitation_code') }}</label>
+                                <input id="supportInvitationCode" class="wb-input" type="text" name="invitation_code" value="{{ old('invitation_code') }}" autocomplete="off" required>
+                                <p class="wb-text-muted wb-text-sm">{{ $adminText('support.invitation_code_help') }}</p>
+                                @error('invitation_code')<div class="wb-field-error">{{ $message }}</div>@enderror
+                            </div>
                             <div><button class="wb-btn wb-btn-primary" type="submit">{{ $adminText('support.connect') }}</button></div>
                         </form>
                     @elseif ($connection->status === 'pending')
@@ -59,7 +65,6 @@
                             <div><strong>{{ $adminText('support.activation_code') }}:</strong> {{ $connection->activation_user_code }}</div>
                         </div>
                         <div class="wb-cluster">
-                            <a class="wb-btn wb-btn-primary" href="{{ $connection->activation_url }}" target="_blank" rel="noopener noreferrer">{{ $adminText('support.open_activation') }}</a>
                             <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.connection.refresh') }}">@csrf<button class="wb-btn wb-btn-secondary" type="submit">{{ $adminText('support.check_activation') }}</button></form>
                             <button class="wb-btn wb-btn-danger" type="button" data-wb-toggle="modal" data-wb-target="#support-disconnect-modal" aria-haspopup="dialog">{{ $adminText('support.disconnect') }}</button>
                         </div>

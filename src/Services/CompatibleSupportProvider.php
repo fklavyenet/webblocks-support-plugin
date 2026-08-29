@@ -53,7 +53,7 @@ final class CompatibleSupportProvider
     ];
   }
 
-  public function beginActivation(array $provider): array
+  public function beginActivation(array $provider, string $invitationCode): array
   {
     $url = $this->urlGuard->normalize($provider['api_base_url'].'/activations');
     $payload = $this->json($this->publicRequest()->post($url, [
@@ -62,24 +62,16 @@ final class CompatibleSupportProvider
       'product_version' => WebBlocks::VERSION,
       'site_url' => (string) config('app.url'),
       'environment' => app()->environment(),
+      'invitation_code' => trim($invitationCode),
     ]), 'start support activation');
 
-    foreach (['activation_id', 'activation_secret', 'user_code', 'verification_url'] as $key) {
+    foreach (['activation_id', 'activation_secret', 'user_code'] as $key) {
       if (! is_string($payload[$key] ?? null) || trim($payload[$key]) === '') {
         throw new SupportProviderException('The support provider returned an invalid activation response.');
       }
     }
 
-    // Provider-owned activation pages commonly carry the short user code in
-    // the query string. It is safe only after the normal HTTPS/public-host
-    // checks and the same-origin assertion below have both passed.
-    $verificationUrl = $this->urlGuard->normalizeNavigationUrl($payload['verification_url']);
-
-    if ($this->origin($verificationUrl) !== $this->origin($provider['provider_url'])) {
-      throw new SupportProviderException('The activation page must use the provider origin.');
-    }
-
-    return $payload + ['verification_url' => $verificationUrl];
+    return $payload;
   }
 
   public function pollActivation(SupportConnection $connection): array

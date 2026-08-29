@@ -14,6 +14,9 @@ class SupportProviderConnectRequest extends FormRequest
 
   public function rules(): array
   {
-    return ['provider_url' => ['required', 'url:https', 'max:2048']];
+    return [
+      'provider_url' => ['required', 'url:https', 'max:2048'],
+      'invitation_code' => ['required', 'string', 'max:64'],
+    ];
   }
 }
