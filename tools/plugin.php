@@ -312,7 +312,7 @@ $releaseSummary = (static function (string $notes) use ($handle, $version): stri
 $metadata = [
     'handle' => $handle,
     'name' => (string) $manifest['label'],
-    'summary' => 'Take bookings on your own site instead of linking out to a third-party scheduling service.',
+    'summary' => 'Connect WebBlocks CMS to a compatible support provider and manage tickets from the admin panel.',
     'description' => (string) $manifest['description'],
     'vendor_name' => 'WebBlocks',
     'license_name' => 'MIT',
@@ -328,7 +328,7 @@ $metadata = [
     'compatibility' => [
         'product' => $env['WEBBLOCKS_PLUGINS_PRODUCT'],
         'version_constraint' => (string) $manifest['required_cms_version'],
-        'php_constraint' => '^8.3',
+        'php_constraint' => '^8.4',
         'laravel_constraint' => '^13.0',
     ],
 ];
