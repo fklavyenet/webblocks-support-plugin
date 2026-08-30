@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 - 2026-08-30
+
+- Pass the diagnostic request identifier through to the provider endpoint when an administrator approves or declines access.
+- Show provider failures inside the diagnostic consent card instead of silently returning to the unchanged ticket.
+
 ## 0.3.1 - 2026-08-30
 
 - Send plugin health diagnostics under the protocol's requested `plugin_health` key, preventing approved diagnostic requests from being rejected by the provider.

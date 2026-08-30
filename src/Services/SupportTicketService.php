@@ -86,7 +86,7 @@ final class SupportTicketService
       return false;
     }
 
-    $this->provider->respondToDiagnostic($this->activeConnection(), $ticketId, [
+    $this->provider->respondToDiagnostic($this->activeConnection(), $ticketId, $diagnosticId, [
       'action' => $action,
       'snapshot' => $snapshot,
       'install_ref' => $this->install->value(),

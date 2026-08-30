@@ -52,6 +52,9 @@
                     <h2 class="wb-card-title">{{ $adminText('support.diagnostics_title') }}</h2>
                 </div>
                 <div class="wb-card-body wb-stack wb-gap-3">
+                    @error('diagnostics')
+                        <div class="wb-alert wb-alert-danger"><div>{{ $message }}</div></div>
+                    @enderror
                     <p>{{ $adminText('support.diagnostics_intro') }}</p>
                     <ul>
                         @foreach ($diagnosticRequest['capabilities'] ?? [] as $capability)
