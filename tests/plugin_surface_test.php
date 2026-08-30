@@ -25,6 +25,9 @@ foreach (['index', 'create', 'show'] as $view) {
   $assert(is_file($root.'/resources/views/support/'.$view.'.blade.php'), 'Support view is missing: '.$view);
 }
 
+$showView = (string) file_get_contents($root.'/resources/views/support/show.blade.php');
+$assert(! str_contains($showView, '@empty@endforelse'), 'Support ticket detail contains an invalid empty forelse branch.');
+
 $sources = '';
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root.'/src')) as $file) {
   if ($file->isFile() && $file->getExtension() === 'php') {

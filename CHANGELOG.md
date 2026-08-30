@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 - 2026-08-30
+
+- Fix the support ticket detail page failing with HTTP 500 because its empty-comment Blade branch compiled to an unterminated conditional.
+- Keep the conversation-first ticket layout introduced in 0.2.1 while rendering tickets with any number of replies safely.
+
 ## 0.2.1 - 2026-08-30
 
 - Redesign support ticket detail around one chronological conversation, with the original request as its first message and clearer requester/support-team distinction.

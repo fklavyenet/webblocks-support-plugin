@@ -58,7 +58,7 @@
                     </p>
                     <div class="wb-prose">{!! nl2br(e($ticket['body'])) !!}</div>
                 </article>
-                @forelse ($comments as $comment)
+                @foreach ($comments as $comment)
                     <article @class(['wb-callout', 'wb-stack', 'wb-gap-2', 'wb-alert-info' => $comment['author_type'] === 'admin'])>
                         <p class="wb-text-sm wb-text-muted">
                             <strong>{{ $comment['author_name'] }}</strong>
@@ -69,7 +69,7 @@
                         </p>
                         <div class="wb-prose">{!! nl2br(e($comment['body'])) !!}</div>
                     </article>
-                @empty@endforelse
+                @endforeach
 
                 @if (in_array($ticket['status'], ['new', 'triaged', 'waiting_on_reporter'], true))
                     <div class="wb-cluster wb-cluster-2 wb-text-sm wb-text-muted">
