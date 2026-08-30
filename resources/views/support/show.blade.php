@@ -29,13 +29,9 @@
 
 @extends('webblocks-cms::layouts.admin', ['title' => $ticket['title'], 'heading' => $ticket['title']])
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('cms/plugins/webblocks-support/css/admin.css') }}?v={{ \WebBlocks\Support\PluginManifest::version() }}">
-@endpush
-
 @section('content')
-    <div class="wb-stack wb-gap-4 wbs-ticket">
-        <div class="wb-cluster wb-cluster-between wbs-ticket-header">
+    <div class="wb-stack wb-gap-4">
+        <div class="wb-cluster wb-cluster-between">
             <div class="wb-stack wb-gap-1">
                 <div class="wb-cluster wb-cluster-2">
                     <h1 class="wb-page-title">#{{ $ticket['number'] }} · {{ $ticket['title'] }}</h1>
@@ -77,15 +73,14 @@
             </section>
         @endforeach
 
-        <section class="wb-card wbs-conversation">
+        <section class="wb-card">
             <div class="wb-card-header">
                 <h2 class="wb-card-title">{{ $adminText('support.conversation') }}</h2>
             </div>
-            <div class="wb-card-body wbs-message-list">
-                <article class="wbs-message wbs-message-requester">
-                    <div class="wbs-message-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($adminText('support.you'), 0, 1)) }}</div>
-                    <div class="wbs-message-content">
-                        <header class="wbs-message-header">
+            <div class="wb-card-body wb-stack wb-gap-3">
+                <article class="wb-card">
+                    <div class="wb-card-body wb-stack wb-gap-2">
+                        <header class="wb-cluster wb-cluster-between">
                             <strong>{{ $adminText('support.you') }}</strong>
                             <time class="wb-text-sm wb-text-muted" datetime="{{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->toAtomString() }}">{{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->isoFormat('LLL') }}</time>
                         </header>
@@ -93,10 +88,9 @@
                     </div>
                 </article>
                 @foreach ($comments as $comment)
-                    <article @class(['wbs-message', 'wbs-message-support' => $comment['author_type'] === 'admin', 'wbs-message-requester' => $comment['author_type'] !== 'admin'])>
-                        <div class="wbs-message-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($comment['author_name'], 0, 1)) }}</div>
-                        <div class="wbs-message-content">
-                            <header class="wbs-message-header">
+                    <article class="wb-card">
+                        <div class="wb-card-body wb-stack wb-gap-2">
+                            <header class="wb-cluster wb-cluster-between">
                                 <span class="wb-cluster wb-cluster-2">
                                     <strong>{{ $comment['author_name'] }}</strong>
                                     @if ($comment['author_type'] === 'admin')
@@ -111,14 +105,14 @@
                 @endforeach
 
                 @if (in_array($ticket['status'], ['new', 'triaged', 'waiting_on_reporter'], true))
-                    <div class="wb-cluster wb-cluster-2 wb-text-sm wb-text-muted wbs-reply-state">
+                    <div class="wb-cluster wb-cluster-2 wb-text-sm wb-text-muted">
                         <i class="wb-icon wb-icon-clock" aria-hidden="true"></i>
                         <span>{{ $waitingForReporter ? $adminText('support.your_reply_pending') : $adminText('support.support_reply_pending') }}</span>
                     </div>
                 @endif
             </div>
 
-            <form class="wbs-composer" method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.comment', ['ticket' => $ticket['id']]) }}">
+            <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.comment', ['ticket' => $ticket['id']]) }}">
                 @csrf
                 <div class="wb-card-body">
                     <div class="wb-field">
@@ -129,7 +123,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="wb-card-footer wbs-composer-footer">
+                <div class="wb-card-footer wb-cluster wb-cluster-between">
                     <button class="wb-btn wb-btn-primary" type="submit">{{ $adminText('support.reply_submit') }}</button>
                 </div>
             </form>

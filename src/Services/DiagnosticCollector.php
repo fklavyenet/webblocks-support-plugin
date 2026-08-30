@@ -26,7 +26,7 @@ final class DiagnosticCollector
     }
 
     if (in_array('plugin_health', $requested, true)) {
-      $snapshot['plugins'] = collect(app(PluginRegistry::class)->summaries())
+      $snapshot['plugin_health'] = collect(app(PluginRegistry::class)->summaries())
         ->map(fn (array $plugin): array => [
           'handle' => (string) ($plugin['handle'] ?? ''),
           'version' => $plugin['version'] ?? null,

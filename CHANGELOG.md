@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2026-08-30
+
+- Send plugin health diagnostics under the protocol's requested `plugin_health` key, preventing approved diagnostic requests from being rejected by the provider.
+- Render conversation messages entirely with native WebBlocks UI cards so the ticket remains usable without a separately published plugin stylesheet.
+- Convert diagnostic provider failures into an in-context support error instead of an unhandled 500 response.
+
 ## 0.3.0 - 2026-08-30
 
 - Add explicit-consent diagnostics to support tickets. Customers see the exact requested categories and can approve or decline before any information leaves their installation.

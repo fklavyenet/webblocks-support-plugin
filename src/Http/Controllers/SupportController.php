@@ -152,8 +152,12 @@ class SupportController extends Controller
     $diagnosticRequest = collect($found['diagnostic_requests'] ?? [])->first(fn (array $item): bool => ($item['id'] ?? null) === $diagnostic);
     abort_unless(is_array($diagnosticRequest), 404);
 
-    $snapshot = $this->diagnostics->collect((array) ($diagnosticRequest['capabilities'] ?? []));
-    abort_unless($this->support->respondToDiagnostic($request->user(), $ticket, $diagnostic, 'submit', $snapshot), 404);
+    try {
+      $snapshot = $this->diagnostics->collect((array) ($diagnosticRequest['capabilities'] ?? []));
+      abort_unless($this->support->respondToDiagnostic($request->user(), $ticket, $diagnostic, 'submit', $snapshot), 404);
+    } catch (Throwable) {
+      return back()->withErrors(['diagnostics' => $this->translator->admin('support.unavailable')]);
+    }
 
     return redirect()->route('webblocks.plugins.webblocks_support.support.show', ['ticket' => $ticket])
       ->with('status', $this->translator->admin('support.diagnostics_shared'));
@@ -162,7 +166,11 @@ class SupportController extends Controller
   public function declineDiagnostics(Request $request, string $ticket, string $diagnostic): RedirectResponse
   {
     $this->authorizeAccess($request);
-    abort_unless($this->support->respondToDiagnostic($request->user(), $ticket, $diagnostic, 'decline'), 404);
+    try {
+      abort_unless($this->support->respondToDiagnostic($request->user(), $ticket, $diagnostic, 'decline'), 404);
+    } catch (Throwable) {
+      return back()->withErrors(['diagnostics' => $this->translator->admin('support.unavailable')]);
+    }
 
     return redirect()->route('webblocks.plugins.webblocks_support.support.show', ['ticket' => $ticket])
       ->with('status', $this->translator->admin('support.diagnostics_declined'));

@@ -26,9 +26,11 @@ foreach (['index', 'create', 'show'] as $view) {
 }
 
 $showView = (string) file_get_contents($root.'/resources/views/support/show.blade.php');
+$collector = (string) file_get_contents($root.'/src/Services/DiagnosticCollector.php');
 $assert(! str_contains($showView, '@empty@endforelse'), 'Support ticket detail contains an invalid empty forelse branch.');
-$assert(str_contains($showView, "asset('cms/plugins/webblocks-support/css/admin.css')"), 'Support ticket detail does not load its scoped admin stylesheet.');
-$assert(is_file($root.'/resources/public/css/admin.css'), 'Support ticket admin stylesheet is missing.');
+$assert(! str_contains($showView, "asset('cms/plugins/webblocks-support/css/admin.css')"), 'Support ticket detail still depends on a separately published plugin stylesheet.');
+$assert(str_contains($showView, '<article class="wb-card">'), 'Conversation messages are not rendered with native WebBlocks UI cards.');
+$assert(str_contains($collector, "\$snapshot['plugin_health']"), 'Plugin health diagnostics do not use the requested protocol capability key.');
 $assert(str_contains($showView, 'support.diagnostics.approve'), 'Support ticket detail does not expose diagnostic approval.');
 $assert(str_contains($showView, 'support.diagnostics.decline'), 'Support ticket detail does not expose diagnostic decline.');
 $assert(is_file($root.'/src/Services/DiagnosticCollector.php'), 'The consent-based diagnostic collector is missing.');
