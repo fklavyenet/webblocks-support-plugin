@@ -31,6 +31,9 @@
 
 @section('content')
     <div class="wb-stack wb-gap-4">
+        @if (session('status'))
+            <div class="wb-alert wb-alert-success" role="status"><div>{{ session('status') }}</div></div>
+        @endif
         <div class="wb-cluster wb-cluster-between">
             <div class="wb-stack wb-gap-1">
                 <div class="wb-cluster wb-cluster-2">
@@ -80,21 +83,19 @@
             <div class="wb-card-header">
                 <h2 class="wb-card-title">{{ $adminText('support.conversation') }}</h2>
             </div>
-            <div class="wb-card-body wb-stack wb-gap-3">
-                <article class="wb-card">
-                    <div class="wb-card-body wb-stack wb-gap-2">
+            <div class="wb-card-body wb-stack wb-gap-2">
+                <article class="wb-callout wb-stack wb-gap-2">
                         <header class="wb-cluster wb-cluster-between">
-                            <strong>{{ $adminText('support.you') }}</strong>
+                            <span class="wb-cluster wb-cluster-2"><span class="wb-badge">{{ mb_strtoupper(mb_substr($adminText('support.you'), 0, 1)) }}</span><strong>{{ $adminText('support.you') }}</strong><span class="wb-badge">{{ $adminText('support.author_reporter') }}</span></span>
                             <time class="wb-text-sm wb-text-muted" datetime="{{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->toAtomString() }}">{{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->isoFormat('LLL') }}</time>
                         </header>
                         <div class="wb-prose">{!! nl2br(e($ticket['body'])) !!}</div>
-                    </div>
                 </article>
                 @foreach ($comments as $comment)
-                    <article class="wb-card">
-                        <div class="wb-card-body wb-stack wb-gap-2">
+                    <article @class(['wb-callout', 'wb-alert', 'wb-alert-info' => $comment['author_type'] === 'admin', 'wb-stack', 'wb-gap-2'])>
                             <header class="wb-cluster wb-cluster-between">
                                 <span class="wb-cluster wb-cluster-2">
+                                    <span class="wb-badge">{{ mb_strtoupper(mb_substr($comment['author_name'], 0, 1)) }}</span>
                                     <strong>{{ $comment['author_name'] }}</strong>
                                     @if ($comment['author_type'] === 'admin')
                                         <span class="wb-badge wb-badge-primary">{{ $adminText('support.author_team') }}</span>
@@ -103,7 +104,6 @@
                                 <time class="wb-text-sm wb-text-muted" datetime="{{ \Illuminate\Support\Carbon::parse($comment['created_at'])->toAtomString() }}">{{ \Illuminate\Support\Carbon::parse($comment['created_at'])->isoFormat('LLL') }}</time>
                             </header>
                             <div class="wb-prose">{!! nl2br(e($comment['body'])) !!}</div>
-                        </div>
                     </article>
                 @endforeach
 

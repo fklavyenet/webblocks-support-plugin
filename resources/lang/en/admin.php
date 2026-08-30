@@ -32,6 +32,7 @@ return array (
   'reply_placeholder' => 'Write a reply…',
   'reply_submit' => 'Send reply',
   'author_team' => 'Support team',
+  'author_reporter' => 'Reporter',
   'diagnostics_title' => 'Diagnostic access requested',
   'diagnostics_intro' => 'Support asked for a limited system snapshot. Review the categories below; nothing is shared until you approve.',
   'diagnostics_system_summary' => 'System versions and environment',

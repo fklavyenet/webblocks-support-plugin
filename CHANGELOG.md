@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.3 - 2026-08-30
+
+- Confirm successful diagnostic sharing visibly at the top of the ticket after redirecting back from consent.
+- Make the conversation easier to scan with compact native WebBlocks UI callouts, role badges, initials, and a clearer support/reporter distinction.
+
 ## 0.3.2 - 2026-08-30
 
 - Pass the diagnostic request identifier through to the provider endpoint when an administrator approves or declines access.

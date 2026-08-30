@@ -29,7 +29,8 @@ $showView = (string) file_get_contents($root.'/resources/views/support/show.blad
 $collector = (string) file_get_contents($root.'/src/Services/DiagnosticCollector.php');
 $assert(! str_contains($showView, '@empty@endforelse'), 'Support ticket detail contains an invalid empty forelse branch.');
 $assert(! str_contains($showView, "asset('cms/plugins/webblocks-support/css/admin.css')"), 'Support ticket detail still depends on a separately published plugin stylesheet.');
-$assert(str_contains($showView, '<article class="wb-card">'), 'Conversation messages are not rendered with native WebBlocks UI cards.');
+$assert(str_contains($showView, 'wb-callout'), 'Conversation messages are not rendered with native WebBlocks UI callouts.');
+$assert(str_contains($showView, "session('status')"), 'Support ticket detail does not show successful actions.');
 $assert(str_contains($collector, "\$snapshot['plugin_health']"), 'Plugin health diagnostics do not use the requested protocol capability key.');
 $ticketService = (string) file_get_contents($root.'/src/Services/SupportTicketService.php');
 $assert(str_contains($ticketService, 'respondToDiagnostic($this->activeConnection(), $ticketId, $diagnosticId,'), 'Diagnostic response does not pass the diagnostic id to the provider client.');

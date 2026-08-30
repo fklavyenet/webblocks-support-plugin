@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "handle": "webblocks-support",
   "label": "WebBlocks Support",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Connect WebBlocks CMS to any compatible support provider and manage tickets from the admin panel.",
   "provider": "WebBlocks\\Support\\SupportServiceProvider",
   "required_cms_version": "^1.75.0",
