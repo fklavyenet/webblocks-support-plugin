@@ -29,6 +29,9 @@ $showView = (string) file_get_contents($root.'/resources/views/support/show.blad
 $assert(! str_contains($showView, '@empty@endforelse'), 'Support ticket detail contains an invalid empty forelse branch.');
 $assert(str_contains($showView, "asset('cms/plugins/webblocks-support/css/admin.css')"), 'Support ticket detail does not load its scoped admin stylesheet.');
 $assert(is_file($root.'/resources/public/css/admin.css'), 'Support ticket admin stylesheet is missing.');
+$assert(str_contains($showView, 'support.diagnostics.approve'), 'Support ticket detail does not expose diagnostic approval.');
+$assert(str_contains($showView, 'support.diagnostics.decline'), 'Support ticket detail does not expose diagnostic decline.');
+$assert(is_file($root.'/src/Services/DiagnosticCollector.php'), 'The consent-based diagnostic collector is missing.');
 
 $sources = '';
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root.'/src')) as $file) {
@@ -59,6 +62,7 @@ $assert(str_contains($health, "View::exists('webblocks-support::support.index')"
 $routes = (string) file_get_contents($root.'/routes/admin.php');
 $assert(! str_contains($routes, 'SupportServiceProvider::registerViewNamespace('), 'A new route file must remain callable with the previous provider class already loaded.');
 $assert(str_contains($routes, "View::addNamespace('webblocks-support'"), 'The transition-safe route view fallback is missing.');
+$assert(str_contains($routes, 'support/{ticket}/diagnostics/{diagnostic}/approve'), 'Diagnostic approval route is missing.');
 
 $publisher = (string) file_get_contents($root.'/tools/plugin.php');
 $assert(str_contains($publisher, "(?:\\s+-[^\\n]*)?"), 'Publisher must accept dated CHANGELOG headings.');

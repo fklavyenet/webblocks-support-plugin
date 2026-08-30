@@ -14,3 +14,5 @@ Route::post('/support/connection/refresh', [SupportController::class, 'refreshAc
 Route::delete('/support/connection', [SupportController::class, 'disconnect'])->name('support.connection.destroy');
 Route::get('/support/{ticket}', [SupportController::class, 'show'])->name('support.show');
 Route::post('/support/{ticket}/replies', [SupportController::class, 'comment'])->name('support.comment');
+Route::post('/support/{ticket}/diagnostics/{diagnostic}/approve', [SupportController::class, 'approveDiagnostics'])->name('support.diagnostics.approve');
+Route::post('/support/{ticket}/diagnostics/{diagnostic}/decline', [SupportController::class, 'declineDiagnostics'])->name('support.diagnostics.decline');

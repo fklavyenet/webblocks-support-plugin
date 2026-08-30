@@ -50,6 +50,33 @@
             </a>
         </div>
 
+        @foreach ($diagnosticRequests as $diagnosticRequest)
+            <section class="wb-card wbs-diagnostics">
+                <div class="wb-card-header">
+                    <h2 class="wb-card-title">{{ $adminText('support.diagnostics_title') }}</h2>
+                </div>
+                <div class="wb-card-body wb-stack wb-gap-3">
+                    <p>{{ $adminText('support.diagnostics_intro') }}</p>
+                    <ul>
+                        @foreach ($diagnosticRequest['capabilities'] ?? [] as $capability)
+                            <li>{{ $adminText('support.diagnostics_'.$capability) }}</li>
+                        @endforeach
+                    </ul>
+                    <div class="wb-alert wb-alert-info"><div>{{ $adminText('support.diagnostics_privacy') }}</div></div>
+                </div>
+                <div class="wb-card-footer wb-cluster wb-cluster-2">
+                    <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.diagnostics.approve', ['ticket' => $ticket['id'], 'diagnostic' => $diagnosticRequest['id']]) }}">
+                        @csrf
+                        <button class="wb-btn wb-btn-primary" type="submit">{{ $adminText('support.diagnostics_approve') }}</button>
+                    </form>
+                    <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.diagnostics.decline', ['ticket' => $ticket['id'], 'diagnostic' => $diagnosticRequest['id']]) }}">
+                        @csrf
+                        <button class="wb-btn wb-btn-secondary" type="submit">{{ $adminText('support.diagnostics_decline') }}</button>
+                    </form>
+                </div>
+            </section>
+        @endforeach
+
         <section class="wb-card wbs-conversation">
             <div class="wb-card-header">
                 <h2 class="wb-card-title">{{ $adminText('support.conversation') }}</h2>

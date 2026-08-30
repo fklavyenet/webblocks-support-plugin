@@ -15,7 +15,7 @@ same contract on their own HTTPS origin.
   "version": "1.0",
   "name": "Example Support",
   "api_base_url": "https://support.example.com/api/webblocks-support/v1",
-  "capabilities": ["ticket.create", "ticket.list", "ticket.read", "ticket.reply"],
+  "capabilities": ["ticket.create", "ticket.list", "ticket.read", "ticket.reply", "diagnostics.request", "diagnostics.consent"],
   "activation_methods": ["invitation_code"]
 }
 ```
@@ -89,6 +89,24 @@ credential; the client never supplies a project id.
 Ticket reads must be scoped by credential and `install_ref`. The CMS also
 checks `external_user_ref` before showing a ticket, so one administrator cannot
 read another administrator's ticket by guessing its id.
+
+## Consent-based diagnostics
+
+A provider advertising `diagnostics.request` may include pending
+`diagnostic_requests` in `GET /tickets/{ticket}`. Each request contains an
+opaque id and an allowlisted set of categories: `system_summary`,
+`recent_application_errors`, and `plugin_health`.
+
+The installation must show those categories to the ticket owner and receive an
+explicit approval before collecting or sending anything. It responds with
+`POST /tickets/{ticket}/diagnostics/{diagnostic}` and either
+`{"action":"decline"}` or `{"action":"submit","snapshot":{...}}`.
+The snapshot is capped at 64 KiB and may contain only the requested categories.
+
+The protocol never accepts a filesystem path or arbitrary command. Diagnostic
+collection excludes `.env`, credentials, cookies and full logs; recent error
+lines are bounded and redacted locally before transmission. Providers retain
+the request, consent and submission timestamps as an audit trail.
 
 ## Secret handling
 

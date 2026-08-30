@@ -55,7 +55,11 @@ final class SupportTicketService
       return null;
     }
 
-    return ['ticket' => $payload['ticket'], 'comments' => $payload['comments'] ?? []];
+    return [
+      'ticket' => $payload['ticket'],
+      'comments' => $payload['comments'] ?? [],
+      'diagnostic_requests' => $payload['diagnostic_requests'] ?? [],
+    ];
   }
 
   public function reply(Authenticatable $user, string $ticketId, string $body): bool
@@ -67,6 +71,24 @@ final class SupportTicketService
     $this->provider->reply($this->activeConnection(), $ticketId, [
       'body' => $body,
       'external_user_name' => (string) $user->name,
+      'install_ref' => $this->install->value(),
+    ]);
+
+    return true;
+  }
+
+  public function respondToDiagnostic(Authenticatable $user, string $ticketId, string $diagnosticId, string $action, ?array $snapshot = null): bool
+  {
+    $found = $this->findForUser($user, $ticketId);
+    $exists = collect($found['diagnostic_requests'] ?? [])->contains(fn (array $request): bool => ($request['id'] ?? null) === $diagnosticId);
+
+    if (! $exists) {
+      return false;
+    }
+
+    $this->provider->respondToDiagnostic($this->activeConnection(), $ticketId, [
+      'action' => $action,
+      'snapshot' => $snapshot,
       'install_ref' => $this->install->value(),
     ]);
 

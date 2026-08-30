@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Throwable;
 use WebBlocks\Support\Http\Requests\SupportProviderConnectRequest;
 use WebBlocks\Support\Services\SupportActivationService;
+use WebBlocks\Support\Services\DiagnosticCollector;
 use WebBlocks\Support\Services\SupportTicketService;
 use WebBlocks\Support\SupportTranslator;
 use WebBlocks\Support\SupportServiceProvider;
@@ -29,6 +30,7 @@ class SupportController extends Controller
     private readonly SupportTicketService $support,
     private readonly SupportActivationService $activation,
     private readonly SupportTranslator $translator,
+    private readonly DiagnosticCollector $diagnostics,
   ) {}
 
   public function index(Request $request): View
@@ -139,7 +141,31 @@ class SupportController extends Controller
     return view('webblocks-support::support.show', [
       'ticket' => $found['ticket'],
       'comments' => $found['comments'],
+      'diagnosticRequests' => $found['diagnostic_requests'] ?? [],
     ]);
+  }
+
+  public function approveDiagnostics(Request $request, string $ticket, string $diagnostic): RedirectResponse
+  {
+    $this->authorizeAccess($request);
+    $found = $this->find($request, $ticket);
+    $diagnosticRequest = collect($found['diagnostic_requests'] ?? [])->first(fn (array $item): bool => ($item['id'] ?? null) === $diagnostic);
+    abort_unless(is_array($diagnosticRequest), 404);
+
+    $snapshot = $this->diagnostics->collect((array) ($diagnosticRequest['capabilities'] ?? []));
+    abort_unless($this->support->respondToDiagnostic($request->user(), $ticket, $diagnostic, 'submit', $snapshot), 404);
+
+    return redirect()->route('webblocks.plugins.webblocks_support.support.show', ['ticket' => $ticket])
+      ->with('status', $this->translator->admin('support.diagnostics_shared'));
+  }
+
+  public function declineDiagnostics(Request $request, string $ticket, string $diagnostic): RedirectResponse
+  {
+    $this->authorizeAccess($request);
+    abort_unless($this->support->respondToDiagnostic($request->user(), $ticket, $diagnostic, 'decline'), 404);
+
+    return redirect()->route('webblocks.plugins.webblocks_support.support.show', ['ticket' => $ticket])
+      ->with('status', $this->translator->admin('support.diagnostics_declined'));
   }
 
   public function comment(Request $request, string $ticket): RedirectResponse

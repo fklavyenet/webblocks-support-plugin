@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0 - 2026-08-30
+
+- Add explicit-consent diagnostics to support tickets. Customers see the exact requested categories and can approve or decline before any information leaves their installation.
+- Collect only allowlisted system summary, plugin state and a bounded recent-error tail; redact credentials, cookies, tokens and email addresses locally, and never accept arbitrary file paths or commands.
+
 ## 0.2.3 - 2026-08-30
 
 - Bring the customer ticket conversation in line with the approved mockup using a plugin-owned, scoped admin stylesheet: compact message cards, avatars, requester/support distinction, readable content width, and a composer visually attached to the thread.

@@ -125,6 +125,14 @@ final class CompatibleSupportProvider
     $this->json($this->authenticated($connection)->post($connection->api_base_url.'/tickets/'.rawurlencode($ticketId).'/comments', $payload), 'reply to a ticket');
   }
 
+  public function respondToDiagnostic(SupportConnection $connection, string $ticketId, string $diagnosticId, array $payload): void
+  {
+    $this->json($this->authenticated($connection)->post(
+      $connection->api_base_url.'/tickets/'.rawurlencode($ticketId).'/diagnostics/'.rawurlencode($diagnosticId),
+      $payload,
+    ), 'respond to a diagnostic request');
+  }
+
   private function publicRequest(): PendingRequest
   {
     return Http::acceptJson()->asJson()->timeout(10)->connectTimeout(5)->withOptions(['allow_redirects' => false]);
