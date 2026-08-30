@@ -55,4 +55,10 @@ $routes = (string) file_get_contents($root.'/routes/admin.php');
 $assert(! str_contains($routes, 'SupportServiceProvider::registerViewNamespace('), 'A new route file must remain callable with the previous provider class already loaded.');
 $assert(str_contains($routes, "View::addNamespace('webblocks-support'"), 'The transition-safe route view fallback is missing.');
 
+$publisher = (string) file_get_contents($root.'/tools/plugin.php');
+$assert(str_contains($publisher, "(?:\\s+-[^\\n]*)?"), 'Publisher must accept dated CHANGELOG headings.');
+$assert(str_contains($publisher, 'Publishing stopped.'), 'Publisher must refuse a release without matching changelog notes.');
+$assert(! str_contains($publisher, "'See CHANGELOG.md.'"), 'Publisher must not send an unresolvable CHANGELOG fallback.');
+$assert(str_contains($publisher, "'details_url'"), 'Publisher must include a release-notes URL.');
+
 echo "WebBlocks Support plugin surface passed.\n";

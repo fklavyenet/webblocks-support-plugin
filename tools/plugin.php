@@ -281,9 +281,14 @@ $releaseNotes = '';
 if (is_file($releaseNotesPath)) {
     // The notes for this version are the CHANGELOG section headed by it, so the
     // catalog listing and the repository cannot drift apart.
-    if (preg_match('/^## ' . preg_quote($version, '/') . '\s*\n(.*?)(?=\n## |\z)/ms', (string) file_get_contents($releaseNotesPath), $section) === 1) {
+    if (preg_match('/^## ' . preg_quote($version, '/') . '(?:\s+-[^\n]*)?\s*\n(.*?)(?=\n## |\z)/ms', (string) file_get_contents($releaseNotesPath), $section) === 1) {
         $releaseNotes = trim($section[1]);
     }
+}
+
+if ($command === 'publish' && $releaseNotes === '') {
+    fwrite(STDERR, "CHANGELOG.md has no release notes section for {$version}. Publishing stopped.\n");
+    exit(1);
 }
 
 /*
@@ -323,7 +328,8 @@ $metadata = [
     'release' => [
         'status' => 'published',
         'summary' => $releaseSummary,
-        'release_notes' => $releaseNotes !== '' ? $releaseNotes : 'See CHANGELOG.md.',
+        'release_notes' => $releaseNotes,
+        'details_url' => "https://github.com/fklavyenet/webblocks-support-plugin/blob/v{$version}/CHANGELOG.md",
     ],
     'compatibility' => [
         'product' => $env['WEBBLOCKS_PLUGINS_PRODUCT'],
