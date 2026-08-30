@@ -27,6 +27,8 @@ foreach (['index', 'create', 'show'] as $view) {
 
 $showView = (string) file_get_contents($root.'/resources/views/support/show.blade.php');
 $assert(! str_contains($showView, '@empty@endforelse'), 'Support ticket detail contains an invalid empty forelse branch.');
+$assert(str_contains($showView, "asset('cms/plugins/webblocks-support/css/admin.css')"), 'Support ticket detail does not load its scoped admin stylesheet.');
+$assert(is_file($root.'/resources/public/css/admin.css'), 'Support ticket admin stylesheet is missing.');
 
 $sources = '';
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root.'/src')) as $file) {

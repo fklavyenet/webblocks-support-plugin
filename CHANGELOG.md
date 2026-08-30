@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.3 - 2026-08-30
+
+- Bring the customer ticket conversation in line with the approved mockup using a plugin-owned, scoped admin stylesheet: compact message cards, avatars, requester/support distinction, readable content width, and a composer visually attached to the thread.
+- Keep the styling inside the Support plugin and its published asset directory rather than adding plugin-specific rules to CMS core.
+
 ## 0.2.2 - 2026-08-30
 
 - Fix the support ticket detail page failing with HTTP 500 because its empty-comment Blade branch compiled to an unterminated conditional.

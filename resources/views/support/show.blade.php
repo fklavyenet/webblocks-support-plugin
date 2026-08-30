@@ -29,9 +29,13 @@
 
 @extends('webblocks-cms::layouts.admin', ['title' => $ticket['title'], 'heading' => $ticket['title']])
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('cms/plugins/webblocks-support/css/admin.css') }}?v={{ \WebBlocks\Support\PluginManifest::version() }}">
+@endpush
+
 @section('content')
-    <div class="wb-stack wb-gap-4">
-        <div class="wb-cluster wb-cluster-between">
+    <div class="wb-stack wb-gap-4 wbs-ticket">
+        <div class="wb-cluster wb-cluster-between wbs-ticket-header">
             <div class="wb-stack wb-gap-1">
                 <div class="wb-cluster wb-cluster-2">
                     <h1 class="wb-page-title">#{{ $ticket['number'] }} · {{ $ticket['title'] }}</h1>
@@ -46,40 +50,48 @@
             </a>
         </div>
 
-        <section class="wb-card">
+        <section class="wb-card wbs-conversation">
             <div class="wb-card-header">
                 <h2 class="wb-card-title">{{ $adminText('support.conversation') }}</h2>
             </div>
-            <div class="wb-card-body wb-stack wb-gap-4">
-                <article class="wb-callout wb-stack wb-gap-2">
-                    <p class="wb-text-sm wb-text-muted">
-                        <strong>{{ $adminText('support.you') }}</strong>
-                        · {{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->isoFormat('LLL') }}
-                    </p>
-                    <div class="wb-prose">{!! nl2br(e($ticket['body'])) !!}</div>
+            <div class="wb-card-body wbs-message-list">
+                <article class="wbs-message wbs-message-requester">
+                    <div class="wbs-message-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($adminText('support.you'), 0, 1)) }}</div>
+                    <div class="wbs-message-content">
+                        <header class="wbs-message-header">
+                            <strong>{{ $adminText('support.you') }}</strong>
+                            <time class="wb-text-sm wb-text-muted" datetime="{{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->toAtomString() }}">{{ \Illuminate\Support\Carbon::parse($ticket['created_at'])->isoFormat('LLL') }}</time>
+                        </header>
+                        <div class="wb-prose">{!! nl2br(e($ticket['body'])) !!}</div>
+                    </div>
                 </article>
                 @foreach ($comments as $comment)
-                    <article @class(['wb-callout', 'wb-stack', 'wb-gap-2', 'wb-alert-info' => $comment['author_type'] === 'admin'])>
-                        <p class="wb-text-sm wb-text-muted">
-                            <strong>{{ $comment['author_name'] }}</strong>
-                            @if ($comment['author_type'] === 'admin')
-                                <span class="wb-badge wb-badge-primary">{{ $adminText('support.author_team') }}</span>
-                            @endif
-                            &middot; {{ \Illuminate\Support\Carbon::parse($comment['created_at'])->isoFormat('LLL') }}
-                        </p>
-                        <div class="wb-prose">{!! nl2br(e($comment['body'])) !!}</div>
+                    <article @class(['wbs-message', 'wbs-message-support' => $comment['author_type'] === 'admin', 'wbs-message-requester' => $comment['author_type'] !== 'admin'])>
+                        <div class="wbs-message-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($comment['author_name'], 0, 1)) }}</div>
+                        <div class="wbs-message-content">
+                            <header class="wbs-message-header">
+                                <span class="wb-cluster wb-cluster-2">
+                                    <strong>{{ $comment['author_name'] }}</strong>
+                                    @if ($comment['author_type'] === 'admin')
+                                        <span class="wb-badge wb-badge-primary">{{ $adminText('support.author_team') }}</span>
+                                    @endif
+                                </span>
+                                <time class="wb-text-sm wb-text-muted" datetime="{{ \Illuminate\Support\Carbon::parse($comment['created_at'])->toAtomString() }}">{{ \Illuminate\Support\Carbon::parse($comment['created_at'])->isoFormat('LLL') }}</time>
+                            </header>
+                            <div class="wb-prose">{!! nl2br(e($comment['body'])) !!}</div>
+                        </div>
                     </article>
                 @endforeach
 
                 @if (in_array($ticket['status'], ['new', 'triaged', 'waiting_on_reporter'], true))
-                    <div class="wb-cluster wb-cluster-2 wb-text-sm wb-text-muted">
+                    <div class="wb-cluster wb-cluster-2 wb-text-sm wb-text-muted wbs-reply-state">
                         <i class="wb-icon wb-icon-clock" aria-hidden="true"></i>
                         <span>{{ $waitingForReporter ? $adminText('support.your_reply_pending') : $adminText('support.support_reply_pending') }}</span>
                     </div>
                 @endif
             </div>
 
-            <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.comment', ['ticket' => $ticket['id']]) }}">
+            <form class="wbs-composer" method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.comment', ['ticket' => $ticket['id']]) }}">
                 @csrf
                 <div class="wb-card-body">
                     <div class="wb-field">
@@ -90,7 +102,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="wb-card-footer">
+                <div class="wb-card-footer wbs-composer-footer">
                     <button class="wb-btn wb-btn-primary" type="submit">{{ $adminText('support.reply_submit') }}</button>
                 </div>
             </form>
