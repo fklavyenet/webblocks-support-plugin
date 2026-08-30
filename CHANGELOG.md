@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2026-08-30
+
+- Redesign support ticket detail around one chronological conversation, with the original request as its first message and clearer requester/support-team distinction.
+- Move status into the compact ticket header, show who is expected to reply next, and reduce reply-success chrome that displaced the conversation.
+
 ## 0.2.0 - 2026-08-29
 
 - Require a single-use support invitation code before an installation can create an activation request.
