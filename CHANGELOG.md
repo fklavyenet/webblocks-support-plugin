@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.4 - 2026-09-18
+
+- Add the German admin translation catalogue and package catalogues for every admin locale required by WebBlocks CMS.
+- Verify that every packaged admin catalogue exposes the same translation keys as English before building a release.
+
 ## 0.3.3 - 2026-08-30
 
 - Confirm successful diagnostic sharing visibly at the top of the ticket after redirecting back from consent.

@@ -20,6 +20,39 @@ $assert(is_file($root.'/src/SupportPluginHealth.php'), 'Health reporter file is 
 $assert(is_file($root.'/src/PluginManifest.php'), 'Manifest reader is missing.');
 $assert(is_file($root.'/routes/admin.php'), 'Admin routes are missing.');
 $assert(is_file($root.'/database/migrations/2026_08_29_080000_create_webblocks_support_connections_table.php'), 'Migration is missing.');
+$adminLocales = ['en', 'de', 'tr', 'es', 'it', 'fr'];
+
+foreach ($adminLocales as $locale) {
+  $assert(is_file($root.'/resources/lang/'.$locale.'/admin.php'), "{$locale} admin translations are missing.");
+}
+
+$translationKeys = static function (array $catalogue, string $prefix = '') use (&$translationKeys): array {
+  $keys = [];
+
+  foreach ($catalogue as $key => $value) {
+    $path = $prefix === '' ? (string) $key : $prefix.'.'.$key;
+
+    if (is_array($value)) {
+      $keys = array_merge($keys, $translationKeys($value, $path));
+    } else {
+      $keys[] = $path;
+    }
+  }
+
+  sort($keys);
+
+  return $keys;
+};
+
+$englishTranslations = require $root.'/resources/lang/en/admin.php';
+
+foreach (array_diff($adminLocales, ['en']) as $locale) {
+  $translations = require $root.'/resources/lang/'.$locale.'/admin.php';
+  $assert(
+    $translationKeys($englishTranslations) === $translationKeys($translations),
+    "{$locale} admin translations must contain exactly the English catalogue keys.",
+  );
+}
 
 foreach (['index', 'create', 'show'] as $view) {
   $assert(is_file($root.'/resources/views/support/'.$view.'.blade.php'), 'Support view is missing: '.$view);
