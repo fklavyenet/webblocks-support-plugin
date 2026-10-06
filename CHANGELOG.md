@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.5
+
+- Declare the help-circle sidebar icon and support the CMS icon picker with an independent appearance Save action.
+- Require WebBlocks CMS 1.92.0, which applies plugin database changes automatically during installation, updates and activation.
+
 ## 0.3.4 - 2026-09-18
 
 - Add the German admin translation catalogue and package catalogues for every admin locale required by WebBlocks CMS.
