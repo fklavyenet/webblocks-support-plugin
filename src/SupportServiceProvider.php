@@ -40,7 +40,7 @@ class SupportServiceProvider extends ServiceProvider
         PluginMenuItem::make('support')
           ->label('Support')
           ->route('webblocks.plugins.webblocks_support.support.index')
-          ->icon('wb-icon-help-circle')
+          ->icon('wb-icon-headset')
           ->permission(self::PERMISSION_ACCESS)
           ->group('Help')
           ->sort(20),

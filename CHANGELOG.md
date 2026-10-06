@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.6
+
+- Use the dedicated headset icon from WebBlocks UI 2.29.0 and require CMS 1.92.1 for the bundled icon set. Existing saved sidebar icon choices continue to take precedence.
+
 ## 0.3.5
 
 - Declare the help-circle sidebar icon and support the CMS icon picker with an independent appearance Save action.
