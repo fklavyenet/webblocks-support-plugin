@@ -113,3 +113,39 @@ the request, consent and submission timestamps as an audit trail.
 Activation and installation credentials are server-to-server secrets. They
 must never be returned to a browser, logged, placed in a site export or exposed
 again in the UI. CMS stores them encrypted with its application key.
+
+## Optional recovery intake
+
+Protocol version remains `1.0`. Providers may append `ticket.recovery` and
+`ticket.idempotency` to discovery capabilities, and a `support_portal_url` on the
+same public HTTPS origin as discovery. Existing required capabilities and
+installation activation are unchanged. Clients must negotiate both capabilities
+before using `POST /tickets/recovery`.
+
+Recovery submissions use the same installation credential and include the normal
+ticket identity/context fields, a UUID `submission_key`, `impact` (`feature`,
+`update_blocked`, `site_down`), optional `onset` (100 characters) and `last_action`
+(2000 characters). An optional `diagnostic_report` uses the CMS
+`webblocks-diagnostics/1` schema and requires `diagnostic_consent: true`.
+The existing diagnostic snapshot ceiling stays 64 KiB; no arbitrary files,
+filesystem paths or commands are accepted through this operation.
+
+The provider serializes admission at the credential boundary and stores a receipt
+unique to credential plus submission UUID. An exact retry returns the same ticket
+and private `tracking_url` without consuming quota again. Reusing the key with
+changed content returns HTTP 409. Credentials remain installation-scoped; a site
+URL or reporter name never selects a project or installation.
+
+The report contains only selected categories: `system_summary`, `update_run`,
+`plugin_health`, `saved_health`, `recent_application_errors`. Error samples contain
+timestamps, severity and fingerprints, never raw messages/context. Collection,
+review and final consent are distinct. The report sent is the reviewed artifact.
+A provider must validate all fields and limits and preserve consent provenance.
+Unknown schemas/categories/fields are rejected rather than stored as an opaque
+persistent JSON bag. Workbench stores typed report values in relational rows.
+
+A provider may return `tracking_url` alongside the ticket receipt. It is a private
+bearer link intended for the reporter and may allow attachments outside CMS. It
+must use the same HTTPS origin, must not expose the installation credential, and
+must not be logged or included in diagnostics. The normal ticket/diagnostic
+endpoints and older clients remain compatible.

@@ -3,16 +3,19 @@
 namespace WebBlocks\Support\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class SupportConnection extends Model
 {
   protected $table = 'webblocks_support_connections';
+
   protected $fillable = [
     'provider_url',
     'provider_name',
     'api_base_url',
     'protocol_version',
-    'capabilities',
+    'support_portal_url',
     'status',
     'activation_id',
     'activation_secret',
@@ -32,7 +35,6 @@ class SupportConnection extends Model
   protected function casts(): array
   {
     return [
-      'capabilities' => 'array',
       'activation_secret' => 'encrypted',
       'activation_expires_at' => 'datetime',
       'credential' => 'encrypted',
@@ -49,6 +51,7 @@ class SupportConnection extends Model
 
   public function supports(string $capability): bool
   {
-    return in_array($capability, $this->capabilities ?? [], true);
+    return Schema::hasTable('webblocks_support_capabilities')
+      && DB::table('webblocks_support_capabilities')->where('connection_id', $this->id)->where('capability', $capability)->exists();
   }
 }

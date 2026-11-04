@@ -1,6 +1,6 @@
 <?php
 
-return array (
+return [
   'title' => 'Support',
   'intro' => 'Report a problem or request a change to this installation’s support provider.',
   'new' => 'New request',
@@ -35,8 +35,8 @@ return array (
   'author_reporter' => 'Reporter',
   'diagnostics_title' => 'Diagnostic access requested',
   'diagnostics_intro' => 'Support asked for a limited system snapshot. Review the categories below; nothing is shared until you approve.',
-  'diagnostics_system_summary' => 'System versions and environment',
-  'diagnostics_recent_application_errors' => 'Recent application errors, with credentials and email addresses redacted',
+  'diagnostics_system_summary' => 'System runtime versions',
+  'diagnostics_recent_application_errors' => 'Recent application error timestamps, severity and fingerprints',
   'diagnostics_plugin_health' => 'Installed plugin versions and enabled state',
   'diagnostics_privacy' => 'Passwords, access tokens, cookies, .env values and arbitrary files are never included.',
   'diagnostics_approve' => 'Approve and share',
@@ -66,18 +66,44 @@ return array (
   'provider' => 'Provider',
   'connection_status' => 'Status',
   'plan' => 'Support plan',
-  'types' => 
-  array (
+  'types' => [
     'Issue' => 'Problem',
     'Suggestion' => 'Suggestion',
     'Question' => 'Question',
-  ),
-  'statuses' => 
-  array (
+  ],
+  'statuses' => [
     'new' => 'New',
     'triaged' => 'In review',
     'converted' => 'Accepted',
     'rejected' => 'Declined',
     'closed' => 'Closed',
-  ),
-);
+  ],
+  'recovery' => [
+    'permission' => 'Share installation diagnostic reports',
+    'no_credentials' => 'Do not include passwords, tokens, environment files or full database backups.',
+    'storage' => 'Support recovery storage',
+    'storage_help' => 'Recovery reports require the plugin capability and tracking-link tables. Run plugin migrations if setup is incomplete.',
+    'impact' => 'Impact',
+    'onset' => 'When did the problem start?',
+    'last_action' => 'Last action before the problem',
+    'report' => 'Reviewed diagnostic report',
+    'optional' => 'Diagnostics are optional. Prepare a report, review its exact contents, then approve sharing. Reports expire after 30 minutes. Remove categories and prepare again to reduce the report.',
+    'run_id' => 'Update run ID (optional; latest when empty)',
+    'prepare_consent' => 'Prepare the selected information for my review.',
+    'prepare' => 'Prepare and review report',
+    'share_consent' => 'I reviewed this exact report and approve sharing it with this support provider.',
+    'omit' => 'Send the request without this report',
+    'download' => 'Download reviewed report',
+    'external' => 'Open independent support',
+    'external_files' => 'Follow request or share files outside CMS',
+    'refresh_capabilities' => 'Check provider capabilities',
+    'share' => 'Share reviewed report',
+    'expired_intent' => 'This submission form expired or its connection changed. Open a new request form.',
+    'delivery_uncertain' => 'Delivery could not be confirmed. Your text is retained. Check existing requests first. Providers with retry protection accept a retry of the same unchanged request; older providers may create duplicates.',
+    'impacts' => [
+      'feature' => 'A feature is not working',
+      'update_blocked' => 'An update is blocked',
+      'site_down' => 'The site is unavailable',
+    ],
+  ],
+];

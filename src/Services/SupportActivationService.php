@@ -35,6 +35,13 @@ final class SupportActivationService
   {
     $connection = $this->connections->current();
 
+    if ($connection?->isActive()) {
+      $discovery = $this->provider->discover($connection->provider_url);
+      $this->connections->saveCapabilities($connection, $discovery['capabilities']);
+      $connection->update(['support_portal_url' => $discovery['support_portal_url'] ?? null, 'last_verified_at' => now()]);
+
+      return $connection->refresh();
+    }
     if (! $connection || $connection->status !== 'pending') {
       throw new SupportProviderException('There is no pending support activation.');
     }

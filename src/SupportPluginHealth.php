@@ -21,6 +21,11 @@ final class SupportPluginHealth
           : 'Setup required. Run plugin migrations to create the support connection table.',
       ],
       [
+        'name' => trans('webblocks-support::admin.recovery.storage'),
+        'status' => Schema::hasTable('webblocks_support_capabilities') && Schema::hasTable('webblocks_support_ticket_links') ? PluginHealthResult::HEALTHY : PluginHealthResult::WARNING,
+        'message' => trans('webblocks-support::admin.recovery.storage_help'),
+      ],
+      [
         'name' => 'Support interface',
         'status' => View::exists('webblocks-support::support.index') ? PluginHealthResult::HEALTHY : PluginHealthResult::WARNING,
         'message' => View::exists('webblocks-support::support.index')

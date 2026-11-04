@@ -2,8 +2,8 @@
 
 namespace WebBlocks\Support;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 use WebBlocks\Cms\Support\Plugins\PluginDefinition;
 use WebBlocks\Cms\Support\Plugins\PluginMenuItem;
 use WebBlocks\Cms\Support\Plugins\PluginPermission;
@@ -11,8 +11,12 @@ use WebBlocks\Cms\Support\Plugins\PluginPermission;
 class SupportServiceProvider extends ServiceProvider
 {
   public const HANDLE = 'webblocks-support';
+
   public const PERMISSION_ACCESS = self::HANDLE.'.access';
+
   public const PERMISSION_MANAGE = self::HANDLE.'.manage';
+
+  public const PERMISSION_DIAGNOSTICS = self::HANDLE.'.share-system-diagnostics';
 
   public function boot(): void
   {
@@ -24,6 +28,7 @@ class SupportServiceProvider extends ServiceProvider
   public static function definition(): PluginDefinition
   {
     self::registerViewNamespace();
+    $labels = require __DIR__.'/../resources/lang/en/admin.php';
 
     return PluginDefinition::make(self::HANDLE)
       ->label(PluginManifest::label())
@@ -35,6 +40,7 @@ class SupportServiceProvider extends ServiceProvider
       ->permissions([
         PluginPermission::make(self::PERMISSION_ACCESS)->label('Use support tickets'),
         PluginPermission::make(self::PERMISSION_MANAGE)->label('Manage the support provider connection'),
+        PluginPermission::make(self::PERMISSION_DIAGNOSTICS)->label($labels['recovery']['permission']),
       ])
       ->menu([
         PluginMenuItem::make('support')

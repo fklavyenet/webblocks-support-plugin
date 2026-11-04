@@ -3,20 +3,43 @@
   "handle": "webblocks-support",
   "label": "WebBlocks Support",
   "icon": "headset",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "description": "Connect WebBlocks CMS to any compatible support provider and manage tickets from the admin panel.",
   "provider": "WebBlocks\\Support\\SupportServiceProvider",
-  "required_cms_version": "^1.92.1",
-  "host_products": ["webblocks-cms"],
-  "requires": {"webblocks-cms": "^1.92.1", "php": ">=8.4"},
-  "type": "cms-plugin",
-  "entry": {"service_provider": "WebBlocks\\Support\\SupportServiceProvider"},
-  "autoload": {"psr-4": {"WebBlocks\\Support\\": "src/"}},
-  "permissions": [
-    {"key": "webblocks-support.access", "label": "Use support tickets"},
-    {"key": "webblocks-support.manage", "label": "Manage the support provider connection"}
+  "required_cms_version": "^1.119.0",
+  "host_products": [
+    "webblocks-cms"
   ],
-  "routes": {"admin": "routes/admin.php"},
+  "requires": {
+    "webblocks-cms": "^1.119.0",
+    "php": ">=8.4"
+  },
+  "type": "cms-plugin",
+  "entry": {
+    "service_provider": "WebBlocks\\Support\\SupportServiceProvider"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebBlocks\\Support\\": "src/"
+    }
+  },
+  "permissions": [
+    {
+      "key": "webblocks-support.access",
+      "label": "Use support tickets"
+    },
+    {
+      "key": "webblocks-support.manage",
+      "label": "Manage the support provider connection"
+    },
+    {
+      "key": "webblocks-support.share-system-diagnostics",
+      "label": "Share installation diagnostic reports"
+    }
+  ],
+  "routes": {
+    "admin": "routes/admin.php"
+  },
   "migrations": "database/migrations",
   "health": "WebBlocks\\Support\\SupportPluginHealth",
   "config": null

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 - 2026-11-04
+
+- Add impact, onset and last-action context, explicit reviewed reports and installation-wide diagnostic authorization on CMS 1.119.0.
+- Negotiate retry-safe recovery intake and independent provider/tracking links while retaining Protocol 1.0 ticket compatibility. Preserve text on uncertain delivery and keep provider credentials server-side.
+- Store negotiated capabilities and private tracking links relationally; existing legacy capability values are imported once without expanding the old JSON column.
+
 ## 0.3.6
 
 - Use the dedicated headset icon from WebBlocks UI 2.29.0 and require CMS 1.92.1 for the bundled icon set. Existing saved sidebar icon choices continue to take precedence.

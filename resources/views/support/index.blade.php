@@ -35,6 +35,7 @@
 
         @include('webblocks-cms::admin.partials.flash')
 
+        @if($connection?->support_portal_url)<p><a class="wb-btn wb-btn-secondary" href="{{ $connection->support_portal_url }}" rel="noreferrer">{{ $adminText('support.recovery.external') }}</a></p>@endif
         @if ($canManageConnection)
             <section class="wb-card">
                 <div class="wb-card-header">
@@ -66,7 +67,8 @@
                         </div>
                         <div class="wb-cluster">
                             <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.connection.refresh') }}">@csrf<button class="wb-btn wb-btn-secondary" type="submit">{{ $adminText('support.check_activation') }}</button></form>
-                            <button class="wb-btn wb-btn-danger" type="button" data-wb-toggle="modal" data-wb-target="#support-disconnect-modal" aria-haspopup="dialog">{{ $adminText('support.disconnect') }}</button>
+                            <form method="post" action="{{ route('webblocks.plugins.webblocks_support.support.connection.refresh') }}">@csrf<button class="wb-btn wb-btn-secondary" type="submit">{{ $adminText('support.recovery.refresh_capabilities') }}</button></form>
+                        <button class="wb-btn wb-btn-danger" type="button" data-wb-toggle="modal" data-wb-target="#support-disconnect-modal" aria-haspopup="dialog">{{ $adminText('support.disconnect') }}</button>
                         </div>
                     @else
                         <div class="wb-table-wrap">

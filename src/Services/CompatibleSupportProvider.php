@@ -5,8 +5,8 @@ namespace WebBlocks\Support\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use WebBlocks\Support\Models\SupportConnection;
 use WebBlocks\Cms\Support\WebBlocks;
+use WebBlocks\Support\Models\SupportConnection;
 
 final class CompatibleSupportProvider
 {
@@ -44,7 +44,16 @@ final class CompatibleSupportProvider
       }
     }
 
+    $portal = null;
+    if (is_string($payload['support_portal_url'] ?? null)) {
+      $portal = $this->urlGuard->normalize($payload['support_portal_url']);
+      if ($this->origin($portal) !== $this->origin($providerUrl)) {
+        throw new SupportProviderException('The support portal must use the provider origin.');
+      }
+    }
+
     return [
+      'support_portal_url' => $portal,
       'provider_url' => $providerUrl,
       'provider_name' => trim((string) ($payload['name'] ?? '')) ?: parse_url($providerUrl, PHP_URL_HOST),
       'api_base_url' => $apiBaseUrl,
@@ -109,6 +118,21 @@ final class CompatibleSupportProvider
   public function createTicket(SupportConnection $connection, array $payload): array
   {
     return $this->json($this->authenticated($connection)->post($connection->api_base_url.'/tickets', $payload), 'file a ticket')['ticket'] ?? [];
+  }
+
+  public function createRecoveryTicket(SupportConnection $connection, array $payload): array
+  {
+    return $this->json($this->authenticated($connection)->post($connection->api_base_url.'/tickets/recovery', $payload), 'file a recovery ticket');
+  }
+
+  public function checkedTrackingUrl(SupportConnection $connection, string $url): string
+  {
+    $url = $this->urlGuard->normalizeNavigationUrl($url);
+    if ($this->origin($url) !== $this->origin($connection->provider_url)) {
+      throw new SupportProviderException('The ticket tracking link must use the provider origin.');
+    }
+
+    return $url;
   }
 
   public function ticket(SupportConnection $connection, string $ticketId): ?array

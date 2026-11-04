@@ -1,6 +1,6 @@
 <?php
 
-return array (
+$catalogue = [
   'title' => 'Support',
   'intro' => 'Melden Sie ein Problem oder bitten Sie den Supportanbieter dieser Installation um eine Änderung.',
   'new' => 'Neue Anfrage',
@@ -35,8 +35,8 @@ return array (
   'author_reporter' => 'Anfragende Person',
   'diagnostics_title' => 'Diagnosezugriff angefordert',
   'diagnostics_intro' => 'Der Support hat einen begrenzten Systembericht angefordert. Prüfen Sie die unten aufgeführten Kategorien; ohne Ihre Zustimmung werden keine Daten weitergegeben.',
-  'diagnostics_system_summary' => 'Systemversionen und Umgebung',
-  'diagnostics_recent_application_errors' => 'Aktuelle Anwendungsfehler, aus denen Zugangsdaten und E-Mail-Adressen entfernt wurden',
+  'diagnostics_system_summary' => 'Versionen der Systemlaufzeit',
+  'diagnostics_recent_application_errors' => 'Zeitpunkte, Schweregrade und Fingerabdrücke aktueller Anwendungsfehler',
   'diagnostics_plugin_health' => 'Installierte Plugin-Versionen und Aktivierungsstatus',
   'diagnostics_privacy' => 'Passwörter, Zugriffstoken, Cookies, .env-Werte und beliebige Dateien werden niemals einbezogen.',
   'diagnostics_approve' => 'Zustimmen und teilen',
@@ -66,18 +66,18 @@ return array (
   'provider' => 'Anbieter',
   'connection_status' => 'Status',
   'plan' => 'Supporttarif',
-  'types' =>
-  array (
+  'types' => [
     'Issue' => 'Problem',
     'Suggestion' => 'Vorschlag',
     'Question' => 'Frage',
-  ),
-  'statuses' =>
-  array (
+  ],
+  'statuses' => [
     'new' => 'Neu',
     'triaged' => 'In Prüfung',
     'converted' => 'Angenommen',
     'rejected' => 'Abgelehnt',
     'closed' => 'Geschlossen',
-  ),
-);
+  ],
+];
+
+return array_replace_recursive(require dirname(__DIR__).'/en/admin.php', $catalogue);

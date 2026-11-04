@@ -49,6 +49,7 @@
             </a>
         </div>
 
+        @if($trackingUrl ?? null)<p><a class="wb-btn wb-btn-secondary" href="{{ $trackingUrl }}" rel="noreferrer">{{ $adminText('support.recovery.external_files') }}</a></p>@endif
         @foreach ($diagnosticRequests as $diagnosticRequest)
             <section class="wb-card wbs-diagnostics">
                 <div class="wb-card-header">
@@ -69,7 +70,7 @@
                 <div class="wb-card-footer wb-cluster wb-cluster-2">
                     <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.diagnostics.approve', ['ticket' => $ticket['id'], 'diagnostic' => $diagnosticRequest['id']]) }}">
                         @csrf
-                        <button class="wb-btn wb-btn-primary" type="submit">{{ $adminText('support.diagnostics_approve') }}</button>
+                        @if($canShareDiagnostics ?? false)<button class="wb-btn wb-btn-primary" type="submit">{{ $adminText('support.recovery.prepare') }}</button>@endif
                     </form>
                     <form method="POST" action="{{ route('webblocks.plugins.webblocks_support.support.diagnostics.decline', ['ticket' => $ticket['id'], 'diagnostic' => $diagnosticRequest['id']]) }}">
                         @csrf
