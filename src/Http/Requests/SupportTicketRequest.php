@@ -23,7 +23,7 @@ class SupportTicketRequest extends FormRequest
       'submission_intent' => ['required', 'string', 'max:2048'], 'report' => ['nullable', 'string', 'max:140000'],
       'diagnostic_consent' => ! $this->routeIs('*.prepare') && $this->filled('report') && ! $this->boolean('omit_report') ? ['accepted'] : ['sometimes', 'accepted'],
       'omit_report' => ['sometimes', 'boolean'],
-      'categories' => ['sometimes', 'array', 'min:1', 'max:5'], 'categories.*' => ['required', 'string', 'distinct', Rule::in(SystemDiagnosticReportQuery::CATEGORIES)],
+      'categories' => [$this->routeIs('*.prepare') ? 'required' : 'sometimes', 'array', 'min:1', 'max:5'], 'categories.*' => ['required', 'string', 'distinct', Rule::in(SystemDiagnosticReportQuery::CATEGORIES)],
       'prepare_consent' => [$this->routeIs('*.prepare') ? 'accepted' : 'sometimes'],
       'run_id' => ['nullable', 'integer', 'min:1'],
     ];

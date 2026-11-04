@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Throwable;
 use WebBlocks\Cms\Support\System\SystemDiagnosticReports;
+use WebBlocks\Support\Http\Requests\DiagnosticSnapshotRequest;
 use WebBlocks\Support\Http\Requests\SupportProviderConnectRequest;
 use WebBlocks\Support\Http\Requests\SupportTicketRequest;
 use WebBlocks\Support\Policies\DiagnosticSharingPolicy;
@@ -73,7 +74,6 @@ class SupportController extends Controller
     abort_unless(app(DiagnosticSharingPolicy::class)->share($request->user()), 403);
     $connection = $this->support->connection();
     abort_unless($connection?->supports('ticket.recovery') && $connection->supports('ticket.idempotency'), 409);
-    $request->validate(['categories' => ['required', 'array', 'min:1']]);
     $envelope = app(SystemDiagnosticReports::class)->prepare($request->user(), $request->validated('categories'), $request->filled('run_id') ? $request->integer('run_id') : null);
 
     return $this->draft($request, $request->validated(), $envelope);
@@ -180,7 +180,7 @@ class SupportController extends Controller
     ]);
   }
 
-  public function approveDiagnostics(Request $request, string $ticket, string $diagnostic): RedirectResponse|Response
+  public function approveDiagnostics(DiagnosticSnapshotRequest $request, string $ticket, string $diagnostic): RedirectResponse|Response
   {
     $this->authorizeAccess($request);
     abort_unless(app(DiagnosticSharingPolicy::class)->share($request->user()), 403);
@@ -197,7 +197,6 @@ class SupportController extends Controller
       return response()->view('webblocks-support::support.diagnostics-preview', ['ticket' => $ticket, 'diagnostic' => $diagnostic, 'envelope' => $envelope, 'reportText' => json_encode($snapshot, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)])
         ->header('Cache-Control', 'private, no-store')->header('Referrer-Policy', 'no-referrer');
     }
-    $request->validate(['report' => ['required', 'string', 'max:140000'], 'diagnostic_consent' => ['accepted']]);
     $snapshot = $reports->open($request->user(), $request->string('report')->toString());
     $actual = array_values(array_diff(array_keys($snapshot), ['collected_at']));
     sort($actual);
@@ -213,10 +212,10 @@ class SupportController extends Controller
       ->with('status', $this->translator->admin('support.diagnostics_shared'));
   }
 
-  public function downloadDiagnosticSnapshot(Request $request): Response
+  public function downloadDiagnosticSnapshot(DiagnosticSnapshotRequest $request): Response
   {
     abort_unless(app(DiagnosticSharingPolicy::class)->share($request->user()), 403);
-    $data = $request->validate(['report' => ['required', 'string', 'max:140000']]);
+    $data = $request->validated();
     $reports = app(SystemDiagnosticReports::class);
     $snapshot = $reports->open($request->user(), $data['report']);
     abort_if(array_diff(array_keys($snapshot), ['collected_at', ...DiagnosticCollector::CAPABILITIES]) !== [], 422);
