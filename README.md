@@ -12,7 +12,7 @@ users do not need a provider account.
 
 ## Recovery support and reviewed reports
 
-Support 0.4.0 requires CMS ^1.119.0. It adds impact, problem onset and last-action
+Support 0.4.0 requires CMS ^1.125.0. It adds impact, problem onset and last-action
 context. System-wide diagnostic sharing additionally requires `access-system`
 and `webblocks-support.share-system-diagnostics`; normal ticket access alone
 cannot prepare or share these reports. Report preparation and final sharing are

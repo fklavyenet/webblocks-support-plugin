@@ -6,12 +6,12 @@
   "version": "0.4.0",
   "description": "Connect WebBlocks CMS to any compatible support provider and manage tickets from the admin panel.",
   "provider": "WebBlocks\\Support\\SupportServiceProvider",
-  "required_cms_version": "^1.119.0",
+  "required_cms_version": "^1.125.0",
   "host_products": [
     "webblocks-cms"
   ],
   "requires": {
-    "webblocks-cms": "^1.119.0",
+    "webblocks-cms": "^1.125.0",
     "php": ">=8.4"
   },
   "type": "cms-plugin",

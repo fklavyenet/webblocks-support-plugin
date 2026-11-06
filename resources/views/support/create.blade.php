@@ -81,7 +81,7 @@
                             <h2 class="wb-card-title" id="support-report-heading">{{ $adminText('support.recovery.report') }}</h2>
                             <p>{{ $adminText('support.recovery.optional') }}</p>
                             @foreach(\WebBlocks\Cms\Queries\SystemDiagnosticReportQuery::CATEGORIES as $category)
-                                <label class="wb-check"><input type="checkbox" name="categories[]" value="{{ $category }}" @checked(in_array($category, old('categories', $draft['categories'] ?? ['system_summary', 'update_run']), true))><span>{{ app(\WebBlocks\Cms\Support\Translations\CmsTranslator::class)->get('diagnostics.category.'.$category, $adminLocaleCode) }}</span></label>
+                                <label class="wb-check"><input type="checkbox" name="categories[]" value="{{ $category }}" @checked(in_array($category, (array) old('categories', $draft['categories'] ?? ['system_summary', 'update_run']), true))><span>{{ app(\WebBlocks\Cms\Support\Translations\CmsTranslator::class)->get('diagnostics.category.'.$category, $adminLocaleCode) }}</span></label>
                             @endforeach
                             <div class="wb-field"><label class="wb-label" for="run-id">{{ $adminText('support.recovery.run_id') }}</label><input class="wb-input" id="run-id" name="run_id" type="number" min="1" value="{{ old('run_id', $draft['run_id'] ?? '') }}"></div>
                             <label class="wb-check"><input type="checkbox" name="prepare_consent" value="1"><span>{{ $adminText('support.recovery.prepare_consent') }}</span></label>
