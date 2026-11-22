@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "handle": "webblocks-support",
+  "images": [
+    {
+      "id": "cover",
+      "role": "cover",
+      "file": "media/cover.png",
+      "alt": "Support ticket list, conversation and ticket details"
+    },
+    {
+      "id": "showcase",
+      "role": "screenshot",
+      "file": "media/showcase.png",
+      "alt": "Support provider connection form before any connection.",
+      "caption": "Showcase reference: WebBlocks CMS 1.90.2 · English interface · synthetic Northstar Studio data."
+    }
+  ]
+}
