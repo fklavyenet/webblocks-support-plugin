@@ -11,7 +11,7 @@
     {
       "id": "showcase",
       "role": "screenshot",
-      "file": "media/showcase.png",
+      "file": "media/showcase.webp",
       "alt": "Support provider connection form before any connection.",
       "caption": "Showcase reference: WebBlocks CMS 1.90.2 · English interface · synthetic Northstar Studio data."
     }
