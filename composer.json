@@ -9,7 +9,10 @@
     "plugin:validate": "@php tools/plugin.php validate",
     "plugin:publish": "@php tools/plugin.php publish",
     "plugin:publish:dry-run": "@php tools/plugin.php publish --dry-run",
-    "test": "@php tests/plugin_surface_test.php"
+    "test": [
+      "@php tests/artifact_test.php",
+      "@php tests/plugin_surface_test.php"
+    ]
   },
   "require": {"php": "^8.4", "ext-json": "*", "ext-zip": "*"}
 }

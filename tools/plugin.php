@@ -145,7 +145,7 @@ if ($zip->open($output, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
     exit(1);
 }
 
-$excludedRoots = ['build', 'tools', 'tests', 'docs', 'vendor'];
+$excludedRoots = ['build', 'catalog', 'tools', 'tests', 'docs', 'vendor'];
 $excludedFiles = ['composer.json', 'composer.lock', 'AGENTS.md'];
 $added = 0;
 
