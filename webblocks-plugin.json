@@ -3,7 +3,7 @@
   "handle": "webblocks-support",
   "label": "WebBlocks Support",
   "icon": "headset",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Connect WebBlocks CMS to any compatible support provider and manage tickets from the admin panel.",
   "provider": "WebBlocks\\Support\\SupportServiceProvider",
   "required_cms_version": "^1.125.0",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1 - 2026-11-24
+
+- Keep catalog covers and screenshots out of the installation ZIP.
+
 ## 0.4.0 - 2026-11-04
 
 - Add impact, onset and last-action context, explicit reviewed reports and installation-wide diagnostic authorization on CMS 1.125.0.
